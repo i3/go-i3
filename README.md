@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/go.i3wm.org/i3)](https://goreportcard.com/report/go.i3wm.org/i3)
+
 Package i3 provides a convenient interface to the i3 window manager via [its IPC
 interface](https://i3wm.org/docs/ipc.html).
 
