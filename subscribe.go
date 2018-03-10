@@ -91,11 +91,12 @@ const (
 
 // EventReceiver is not safe for concurrent use.
 type EventReceiver struct {
-	types []EventType // for re-subscribing on io.EOF
-	sock  *socket
-	conn  net.Conn
-	ev    Event
-	err   error
+	types     []EventType // for re-subscribing on io.EOF
+	sock      *socket
+	conn      net.Conn
+	ev        Event
+	err       error
+	reconnect bool
 }
 
 // Event returns the most recent event received from i3 by a call to Next.
@@ -108,7 +109,8 @@ func (r *EventReceiver) subscribe() error {
 	if r.conn != nil {
 		r.conn.Close()
 	}
-	r.sock, r.conn, err = getIPCSocket(r.conn != nil)
+	r.sock, r.conn, err = getIPCSocket(r.reconnect)
+	r.reconnect = true
 	if err != nil {
 		return err
 	}
