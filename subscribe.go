@@ -72,6 +72,14 @@ type ShutdownEvent struct {
 	Change string `json:"change"`
 }
 
+// TickEvent contains the payload of the last tick command.
+//
+// See https://i3wm.org/docs/ipc.html#_tick_event for more details.
+type TickEvent struct {
+	First   bool   `json:"first"`
+	Payload string `json:"payload"`
+}
+
 type eventReplyType int
 
 const (
@@ -82,6 +90,7 @@ const (
 	eventReplyTypeBarconfigUpdate
 	eventReplyTypeBinding
 	eventReplyTypeShutdown
+	eventReplyTypeTick
 )
 
 const (
@@ -172,6 +181,10 @@ func (r *EventReceiver) next() (Event, error) {
 	case eventReplyTypeShutdown:
 		var e ShutdownEvent
 		return &e, json.Unmarshal(reply.Payload, &e)
+
+	case eventReplyTypeTick:
+		var e TickEvent
+		return &e, json.Unmarshal(reply.Payload, &e)
 	}
 	return nil, fmt.Errorf("BUG: event reply type %d not implemented yet", t)
 }
@@ -252,6 +265,7 @@ var eventAtLeast = map[EventType]majorMinor{
 	BarconfigUpdateEventType: {4, 6},
 	BindingEventType:         {4, 9},
 	ShutdownEventType:        {4, 14},
+	TickEventType:            {4, 15},
 }
 
 // Subscribe returns an EventReceiver for receiving events of the specified
