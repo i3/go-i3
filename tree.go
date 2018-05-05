@@ -48,6 +48,17 @@ type Rect struct {
 	Height int64 `json:"height"`
 }
 
+// WindowProperties correspond to X11 window properties
+//
+// See https://build.i3wm.org/docs/ipc.html#_tree_reply
+type WindowProperties struct {
+	Title     string `json:"title"`
+	Instance  string `json:"instance"`
+	Class     string `json:"class"`
+	Role      string `json:"window_role"`
+	Transient NodeID `json:"transient_for"`
+}
+
 // NodeID is an i3-internal ID for the node, which can be used to identify
 // containers within the IPC interface.
 type NodeID int64
@@ -56,23 +67,24 @@ type NodeID int64
 //
 // See https://i3wm.org/docs/ipc.html#_tree_reply for more details.
 type Node struct {
-	ID                 NodeID      `json:"id"`
-	Name               string      `json:"name"` // window: title, container: internal name
-	Type               NodeType    `json:"type"`
-	Border             BorderStyle `json:"border"`
-	CurrentBorderWidth int64       `json:"current_border_width"`
-	Layout             Layout      `json:"layout"`
-	Percent            float64     `json:"percent"`
-	Rect               Rect        `json:"rect"`        // absolute (= relative to X11 display)
-	WindowRect         Rect        `json:"window_rect"` // window, relative to Rect
-	DecoRect           Rect        `json:"deco_rect"`   // decoration, relative to Rect
-	Geometry           Rect        `json:"geometry"`    // original window geometry, absolute
-	Window             int64       `json:"window"`      // X11 window ID of the client window
-	Urgent             bool        `json:"urgent"`      // urgency hint set
-	Focused            bool        `json:"focused"`
-	Focus              []NodeID    `json:"focus"`
-	Nodes              []*Node     `json:"nodes"`
-	FloatingNodes      []*Node     `json:"floating_nodes"`
+	ID                 NodeID           `json:"id"`
+	Name               string           `json:"name"` // window: title, container: internal name
+	Type               NodeType         `json:"type"`
+	Border             BorderStyle      `json:"border"`
+	CurrentBorderWidth int64            `json:"current_border_width"`
+	Layout             Layout           `json:"layout"`
+	Percent            float64          `json:"percent"`
+	Rect               Rect             `json:"rect"`        // absolute (= relative to X11 display)
+	WindowRect         Rect             `json:"window_rect"` // window, relative to Rect
+	DecoRect           Rect             `json:"deco_rect"`   // decoration, relative to Rect
+	Geometry           Rect             `json:"geometry"`    // original window geometry, absolute
+	Window             int64            `json:"window"`      // X11 window ID of the client window
+	WindowProperties   WindowProperties `json:"window_properties"`
+	Urgent             bool             `json:"urgent"` // urgency hint set
+	Focused            bool             `json:"focused"`
+	Focus              []NodeID         `json:"focus"`
+	Nodes              []*Node          `json:"nodes"`
+	FloatingNodes      []*Node          `json:"floating_nodes"`
 }
 
 // FindChild returns the first Node matching predicate, using pre-order
