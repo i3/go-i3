@@ -268,6 +268,7 @@ func TestGoldens(t *testing.T) {
 		"DISPLAY=" + DISPLAY,
 		"PATH=" + os.Getenv("PATH"),
 	}
+	wm.Stderr = os.Stderr
 	if err := wm.Start(); err != nil {
 		t.Fatal(err)
 	}

@@ -83,6 +83,7 @@ func TestRestart(t *testing.T) {
 		t.Fatal(err)
 	}
 	wm := exec.CommandContext(ctx, "i3", "-c", abs, "-d", "all", fmt.Sprintf("--shmlog-size=%d", 25*1024*1024))
+	wm.Stderr = os.Stderr
 	wm.Env = []string{
 		"DISPLAY=" + DISPLAY,
 		"PATH=" + os.Getenv("PATH"),
