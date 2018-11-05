@@ -7,7 +7,7 @@ services:
 
 language: go
 go:
-  - 1.9
+  - "1.11"
 go_import_path: go.i3wm.org/i3
 
 script:
