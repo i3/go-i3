@@ -18,4 +18,4 @@ script:
   - go vet .
   - go test -c
   - docker build --pull --no-cache --rm -t=goi3 -f travis/Dockerfile .
-  - docker run -v $PWD:/usr/src:ro goi3 /bin/sh -c './i3.test -test.v'
+  - docker run -v $PWD:/usr/src goi3 /bin/sh -c 'strace -f -o st -s 2048 -v -y ./i3.test -test.v' || cat st
