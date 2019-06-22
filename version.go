@@ -3,6 +3,7 @@ package i3
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 )
 
 // Version describes an i3 version.
@@ -12,6 +13,7 @@ type Version struct {
 	Major                int64  `json:"major"`
 	Minor                int64  `json:"minor"`
 	Patch                int64  `json:"patch"`
+	Variant              string `json:"variant,omitempty"`
 	HumanReadable        string `json:"human_readable"`
 	LoadedConfigFileName string `json:"loaded_config_file_name"`
 }
@@ -47,6 +49,10 @@ func AtLeast(major int64, minor int64) error {
 		if err != nil {
 			return err
 		}
+	}
+	if version.Variant != "" {
+		log.Printf("non standard i3 payload variant '%s' detected. Ignoring version check. This is fully unsupported.", version.Variant)
+		return nil
 	}
 	if version.Major == major && version.Minor >= minor {
 		return nil

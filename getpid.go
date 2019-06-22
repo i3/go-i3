@@ -5,7 +5,8 @@ import (
 	"github.com/BurntSushi/xgbutil/xprop"
 )
 
-func i3Running() bool {
+// IsRunningHook provides a method to override the method which detects if i3 is running or not
+var IsRunningHook = func() bool {
 	xu, err := xgbutil.NewConn()
 	if err != nil {
 		return false // X session terminated
@@ -20,4 +21,8 @@ func i3Running() bool {
 		return false
 	}
 	return pidValid(int(num))
+}
+
+func i3Running() bool {
+	return IsRunningHook()
 }
