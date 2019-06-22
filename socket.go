@@ -24,14 +24,26 @@ var remote struct {
 	mu    sync.Mutex
 }
 
+//commandHook interface provides an override method signature usable by SocketPathHook and IsRunningHook
+type commandHook func() (string, error)
+
+//SocketPathHook Provides a way to override the default socket path
+var SocketPathHook commandHook = func() (string, error) {
+	out, err := exec.Command("i3", "--get-socketpath").CombinedOutput()
+	if err != nil {
+		return "", fmt.Errorf("getting i3 socketpath: %v (output: %s)", err, out)
+	}
+	return string(out), nil
+}
+
 func getIPCSocket(updateSocketPath bool) (*socket, net.Conn, error) {
 	remote.mu.Lock()
 	defer remote.mu.Unlock()
 	path := remote.path
 	if updateSocketPath || remote.path == "" {
-		out, err := exec.Command("i3", "--get-socketpath").CombinedOutput()
+		out, err := SocketPathHook()
 		if err != nil {
-			return nil, nil, fmt.Errorf("getting i3 socketpath: %v (output: %s)", err, out)
+			return nil, nil, err
 		}
 		path = strings.TrimSpace(string(out))
 	}
