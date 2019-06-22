@@ -24,11 +24,8 @@ var remote struct {
 	mu    sync.Mutex
 }
 
-//commandHook interface provides an override method signature usable by SocketPathHook and IsRunningHook
-type commandHook func() (string, error)
-
-//SocketPathHook Provides a way to override the default socket path
-var SocketPathHook commandHook = func() (string, error) {
+// SocketPathHook Provides a way to override the default socket path lookup mechanism. Overriding this is unsupported.
+var SocketPathHook = func() (string, error) {
 	out, err := exec.Command("i3", "--get-socketpath").CombinedOutput()
 	if err != nil {
 		return "", fmt.Errorf("getting i3 socketpath: %v (output: %s)", err, out)
