@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
@@ -35,6 +36,26 @@ func displayLikelyAvailable(display int) bool {
 	}
 
 	return !pidValid(pid)
+}
+
+func launchI3(ctx context.Context, DISPLAY, I3SOCK string) (cleanup func(), _ error) {
+	abs, err := filepath.Abs("testdata/i3.config")
+	if err != nil {
+		return nil, err
+	}
+	wm := exec.CommandContext(ctx, "i3", "-c", abs, "-d", "all", fmt.Sprintf("--shmlog-size=%d", 5*1024*1024))
+	wm.Env = []string{
+		"DISPLAY=" + DISPLAY,
+		"PATH=" + os.Getenv("PATH"),
+	}
+	if I3SOCK != "" {
+		wm.Env = append(wm.Env, "I3SOCK="+I3SOCK)
+	}
+	wm.Stderr = os.Stderr
+	if err := wm.Start(); err != nil {
+		return nil, err
+	}
+	return func() { wm.Process.Kill() }, nil
 }
 
 var signalMu sync.Mutex

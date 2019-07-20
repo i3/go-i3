@@ -2,7 +2,7 @@ package i3
 
 import (
 	"context"
-	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -78,19 +78,18 @@ func TestRestart(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	abs, err := filepath.Abs("testdata/i3.config")
+	dir, err := ioutil.TempDir("", "i3restart")
 	if err != nil {
 		t.Fatal(err)
 	}
-	wm := exec.CommandContext(ctx, "i3", "-c", abs, "-d", "all", fmt.Sprintf("--shmlog-size=%d", 5*1024*1024))
-	wm.Stderr = os.Stderr
-	wm.Env = []string{
-		"DISPLAY=" + DISPLAY,
-		"PATH=" + os.Getenv("PATH"),
-	}
-	if err := wm.Start(); err != nil {
+	defer os.RemoveAll(dir)
+	I3SOCK := filepath.Join(dir, "i3.sock")
+
+	cleanup, err := launchI3(ctx, DISPLAY, I3SOCK)
+	if err != nil {
 		t.Fatal(err)
 	}
+	defer cleanup()
 
 	cmd := exec.Command(os.Args[0], "-test.run=TestRestartSubprocess", "-test.v")
 	cmd.Env = []string{

@@ -2,7 +2,6 @@ package i3
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -259,19 +258,11 @@ func TestGoldens(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	abs, err := filepath.Abs("testdata/i3.config")
+	cleanup, err := launchI3(ctx, DISPLAY, "")
 	if err != nil {
 		t.Fatal(err)
 	}
-	wm := exec.CommandContext(ctx, "i3", "-c", abs, "-d", "all", fmt.Sprintf("--shmlog-size=%d", 5*1024*1024))
-	wm.Env = []string{
-		"DISPLAY=" + DISPLAY,
-		"PATH=" + os.Getenv("PATH"),
-	}
-	wm.Stderr = os.Stderr
-	if err := wm.Start(); err != nil {
-		t.Fatal(err)
-	}
+	defer cleanup()
 
 	cmd := exec.Command(os.Args[0], "-test.run=TestGoldensSubprocess", "-test.v")
 	cmd.Env = []string{
