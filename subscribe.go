@@ -3,6 +3,7 @@ package i3
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
 	"net"
 	"time"
@@ -117,6 +118,9 @@ func (r *EventReceiver) subscribe() error {
 	var err error
 	if r.conn != nil {
 		r.conn.Close()
+	}
+	if wasRestart {
+		r.reconnect = false
 	}
 	r.sock, r.conn, err = getIPCSocket(r.reconnect)
 	r.reconnect = true
@@ -340,6 +344,8 @@ func restart(firstAttempt bool) error {
 	return nil // shutdown event received
 }
 
+var wasRestart = false
+
 // Restart sends the restart command to i3. Sending restart via RunCommand will
 // result in a deadlock: since i3 restarts before it sends the reply to the
 // restart command, RunCommand will retry the command indefinitely.
@@ -350,8 +356,15 @@ func Restart() error {
 		return err
 	}
 
-	// TODO: send a PR which makes restarts lazy (executed after parse_command
-	// returns), generating a reply. Can version-switch using AtLeast here.
+	// TODO(https://github.com/i3/i3/pull/3743): conditionally use this approach
+	// once the restart reply PR made it into an i3 release:
+	if false {
+		_, err := roundTrip(messageTypeRunCommand, []byte("restart"))
+		return err
+	}
+
+	log.Println("preventing any further X11 connections to work around issue #3")
+	wasRestart = true
 
 	var (
 		firstAttempt = true

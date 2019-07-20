@@ -37,7 +37,7 @@ func getIPCSocket(updateSocketPath bool) (*socket, net.Conn, error) {
 	remote.mu.Lock()
 	defer remote.mu.Unlock()
 	path := remote.path
-	if updateSocketPath || remote.path == "" {
+	if (!wasRestart && updateSocketPath) || remote.path == "" {
 		out, err := SocketPathHook()
 		if err != nil {
 			return nil, nil, err
