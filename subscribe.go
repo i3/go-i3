@@ -356,9 +356,7 @@ func Restart() error {
 		return err
 	}
 
-	// TODO(https://github.com/i3/i3/pull/3743): conditionally use this approach
-	// once the restart reply PR made it into an i3 release:
-	if false {
+	if AtLeast(4, 17) == nil {
 		_, err := roundTrip(messageTypeRunCommand, []byte("restart"))
 		return err
 	}
