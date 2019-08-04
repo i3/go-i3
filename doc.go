@@ -19,4 +19,4 @@
 // which they were introduced. Under the covers, they use AtLeast, so they
 // return a helpful error message at runtime if the running i3 version is too
 // old.
-package i3 // import "go.i3wm.org/i3/v4"
+package i3
