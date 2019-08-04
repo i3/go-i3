@@ -7,6 +7,13 @@ interface](https://i3wm.org/docs/ipc.html).
 
 See [its documentation](https://godoc.org/go.i3wm.org/i3) for more details.
 
+## Start using it
+
+In [module mode](https://github.com/golang/go/wiki/Modules), use import path
+`go.i3wm.org/i3/v4`.
+
+In non-module mode, use import path `go.i3wm.org/i3`.
+
 ## Advantages over other i3 IPC packages
 
 Here comes a grab bag of features to which we paid attention. At the time of
