@@ -81,6 +81,7 @@ type Node struct {
 	Window             int64            `json:"window"`      // X11 window ID of the client window
 	WindowProperties   WindowProperties `json:"window_properties"`
 	Urgent             bool             `json:"urgent"` // urgency hint set
+	Marks              []string         `json:"marks"`
 	Focused            bool             `json:"focused"`
 	Focus              []NodeID         `json:"focus"`
 	Nodes              []*Node          `json:"nodes"`
