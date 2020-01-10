@@ -107,6 +107,7 @@ type EventReceiver struct {
 	ev        Event
 	err       error
 	reconnect bool
+	closed    bool
 }
 
 // Event returns the most recent event received from i3 by a call to Next.
@@ -209,6 +210,10 @@ Outer:
 			return true // happy path
 		}
 
+		if r.closed {
+			return false
+		}
+
 		// reconnect
 		start := time.Now()
 		for time.Since(start) < reconnectTimeout && (r.sock == nil || i3Running()) {
@@ -228,6 +233,7 @@ Outer:
 // Close closes the connection to i3. If you don’t ever call Close, you must
 // consume events via Next to prevent i3 from deadlocking.
 func (r *EventReceiver) Close() error {
+	r.closed = true
 	if r.conn != nil {
 		if r.err == nil {
 			r.err = r.conn.Close()
