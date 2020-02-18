@@ -40,8 +40,8 @@ func TestGoldensSubprocess(t *testing.T) {
 			Patch:                0,
 			LoadedConfigFileName: abs,
 		}
-		if diff := cmp.Diff(got, want); diff != "" {
-			t.Fatalf("unexpected GetVersion reply: (-got +want)\n%s", diff)
+		if diff := cmp.Diff(want, got); diff != "" {
+			t.Fatalf("unexpected GetVersion reply: (-want +got)\n%s", diff)
 		}
 	})
 
@@ -65,8 +65,8 @@ func TestGoldensSubprocess(t *testing.T) {
 			t.Fatal(err)
 		}
 		want := []string{"bar-0"}
-		if diff := cmp.Diff(got, want); diff != "" {
-			t.Fatalf("unexpected GetBarIDs reply: (-got +want)\n%s", diff)
+		if diff := cmp.Diff(want, got); diff != "" {
+			t.Fatalf("unexpected GetBarIDs reply: (-want +got)\n%s", diff)
 		}
 	})
 
@@ -108,8 +108,8 @@ func TestGoldensSubprocess(t *testing.T) {
 				BindingModeBorder:           "#ffffff",
 			},
 		}
-		if diff := cmp.Diff(got, want); diff != "" {
-			t.Fatalf("unexpected GetBarConfig reply: (-got +want)\n%s", diff)
+		if diff := cmp.Diff(want, got); diff != "" {
+			t.Fatalf("unexpected GetBarConfig reply: (-want +got)\n%s", diff)
 		}
 	})
 
@@ -120,8 +120,8 @@ func TestGoldensSubprocess(t *testing.T) {
 			t.Fatal(err)
 		}
 		want := []string{"default"}
-		if diff := cmp.Diff(got, want); diff != "" {
-			t.Fatalf("unexpected GetBindingModes reply: (-got +want)\n%s", diff)
+		if diff := cmp.Diff(want, got); diff != "" {
+			t.Fatalf("unexpected GetBindingModes reply: (-want +got)\n%s", diff)
 		}
 	})
 
@@ -132,8 +132,8 @@ func TestGoldensSubprocess(t *testing.T) {
 			t.Fatal(err)
 		}
 		want := []string{"foo"}
-		if diff := cmp.Diff(got, want); diff != "" {
-			t.Fatalf("unexpected GetMarks reply: (-got +want)\n%s", diff)
+		if diff := cmp.Diff(want, got); diff != "" {
+			t.Fatalf("unexpected GetMarks reply: (-want +got)\n%s", diff)
 		}
 	})
 
@@ -155,8 +155,8 @@ func TestGoldensSubprocess(t *testing.T) {
 				Rect:             Rect{Width: 1280, Height: 800},
 			},
 		}
-		if diff := cmp.Diff(got, want); diff != "" {
-			t.Fatalf("unexpected GetOutputs reply: (-got +want)\n%s", diff)
+		if diff := cmp.Diff(want, got); diff != "" {
+			t.Fatalf("unexpected GetOutputs reply: (-want +got)\n%s", diff)
 		}
 	})
 
@@ -183,8 +183,8 @@ func TestGoldensSubprocess(t *testing.T) {
 				},
 				cmp.Ignore()),
 		}
-		if diff := cmp.Diff(got, want, cmpopts...); diff != "" {
-			t.Fatalf("unexpected GetWorkspaces reply: (-got +want)\n%s", diff)
+		if diff := cmp.Diff(want, got, cmpopts...); diff != "" {
+			t.Fatalf("unexpected GetWorkspaces reply: (-want +got)\n%s", diff)
 		}
 	})
 
@@ -203,8 +203,8 @@ func TestGoldensSubprocess(t *testing.T) {
 				Error:   "Expected one of these tokens: <end>, '[', 'move', 'exec', 'exit', 'restart', 'reload', 'shmlog', 'debuglog', 'border', 'layout', 'append_layout', 'workspace', 'focus', 'kill', 'open', 'fullscreen', 'sticky', 'split', 'floating', 'mark', 'unmark', 'resize', 'rename', 'nop', 'scratchpad', 'swap', 'title_format', 'mode', 'bar'",
 			},
 		}
-		if diff := cmp.Diff(got, want); diff != "" {
-			t.Fatalf("unexpected RunCommand reply: (-got +want)\n%s", diff)
+		if diff := cmp.Diff(want, got); diff != "" {
+			t.Fatalf("unexpected RunCommand reply: (-want +got)\n%s", diff)
 		}
 	})
 
@@ -221,8 +221,8 @@ func TestGoldensSubprocess(t *testing.T) {
 		want := Config{
 			Config: string(configBytes),
 		}
-		if diff := cmp.Diff(got, want); diff != "" {
-			t.Fatalf("unexpected GetConfig reply: (-got +want)\n%s", diff)
+		if diff := cmp.Diff(want, got); diff != "" {
+			t.Fatalf("unexpected GetConfig reply: (-want +got)\n%s", diff)
 		}
 	})
 
