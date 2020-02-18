@@ -176,7 +176,14 @@ func TestGoldensSubprocess(t *testing.T) {
 				Output:  "screen",
 			},
 		}
-		if diff := cmp.Diff(got, want); diff != "" {
+		cmpopts := []cmp.Option{
+			cmp.FilterPath(
+				func(p cmp.Path) bool {
+					return p.Last().String() == ".ID"
+				},
+				cmp.Ignore()),
+		}
+		if diff := cmp.Diff(got, want, cmpopts...); diff != "" {
 			t.Fatalf("unexpected GetWorkspaces reply: (-got +want)\n%s", diff)
 		}
 	})

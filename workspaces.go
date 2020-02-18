@@ -2,17 +2,22 @@ package i3
 
 import "encoding/json"
 
+// WorkspaceID is an i3-internal ID for the node, which can be used to identify
+// workspaces within the IPC interface.
+type WorkspaceID int64
+
 // Workspace describes an i3 workspace.
 //
 // See https://i3wm.org/docs/ipc.html#_workspaces_reply for more details.
 type Workspace struct {
-	Num     int64  `json:"num"`
-	Name    string `json:"name"`
-	Visible bool   `json:"visible"`
-	Focused bool   `json:"focused"`
-	Urgent  bool   `json:"urgent"`
-	Rect    Rect   `json:"rect"`
-	Output  string `json:"output"`
+	ID      WorkspaceID `json:"id"`
+	Num     int64       `json:"num"`
+	Name    string      `json:"name"`
+	Visible bool        `json:"visible"`
+	Focused bool        `json:"focused"`
+	Urgent  bool        `json:"urgent"`
+	Rect    Rect        `json:"rect"`
+	Output  string      `json:"output"`
 }
 
 // GetWorkspaces returns i3’s current workspaces.

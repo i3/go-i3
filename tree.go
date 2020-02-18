@@ -63,6 +63,17 @@ type WindowProperties struct {
 // containers within the IPC interface.
 type NodeID int64
 
+// FullscreenMode indicates whether the container is fullscreened, and relative
+// to where (its output, or globally). Note that all workspaces are considered
+// fullscreened on their respective output.
+type FullscreenMode int64
+
+const (
+	FullscreenNone   FullscreenMode = 0
+	FullscreenOutput FullscreenMode = 1
+	FullscreenGlobal FullscreenMode = 2
+)
+
 // Node is a node in a Tree.
 //
 // See https://i3wm.org/docs/ipc.html#_tree_reply for more details.
@@ -83,6 +94,8 @@ type Node struct {
 	Urgent             bool             `json:"urgent"` // urgency hint set
 	Marks              []string         `json:"marks"`
 	Focused            bool             `json:"focused"`
+	WindowType         string           `json:"window_type"`
+	FullscreenMode     FullscreenMode   `json:"fullscreen_mode"`
 	Focus              []NodeID         `json:"focus"`
 	Nodes              []*Node          `json:"nodes"`
 	FloatingNodes      []*Node          `json:"floating_nodes"`
