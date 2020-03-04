@@ -49,11 +49,12 @@ func AtLeast(major int64, minor int64) error {
 		if err != nil {
 			return err
 		}
+		if version.Variant != "" {
+			log.Printf("non standard i3 payload variant '%s' detected. Ignoring version check. This is fully unsupported.", version.Variant)
+			return nil
+		}
 	}
-	if version.Variant != "" {
-		log.Printf("non standard i3 payload variant '%s' detected. Ignoring version check. This is fully unsupported.", version.Variant)
-		return nil
-	}
+
 	if version.Major == major && version.Minor >= minor {
 		return nil
 	}
