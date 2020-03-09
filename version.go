@@ -36,7 +36,7 @@ func GetVersion() (Version, error) {
 // reply. Access only values which don’t change, e.g. Major, Minor.
 var version Version
 
-// version warning is used to only warn a single time when unsupported versions are
+// versionWarning is used to only warn a single time when unsupported versions are
 // detected.
 var versionWarning bool
 
@@ -56,7 +56,6 @@ func AtLeast(major int64, minor int64) error {
 	}
 
 	if version.Variant != "" {
-		versionWarning = true
 		if !versionWarning {
 			versionWarning = true
 			log.Printf("non standard i3 payload variant '%s' detected. Ignoring version check. This is fully unsupported.", version.Variant)
