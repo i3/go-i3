@@ -1,0 +1,59 @@
+name: GitHub Actions CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        # Run on the latest minor release of Go 1.14:
+        go-version: ^1.14
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Ensure all files were formatted as per gofmt
+      run: |
+        gofmt -l $(find . -name '*.go') >/dev/null
+
+    - name: Get dependencies
+      run: |
+        go get -v -t -d ./...
+
+    - name: Go Vet
+      run: |
+        go vet
+
+    - name: Build
+      run: |
+        go build -v .
+
+    - name: Test
+      run: |
+        go test -c
+
+    - name: Build Docker container with i3
+      run: |
+        docker build --pull --no-cache --rm -t=goi3 -f travis/Dockerfile .
+
+    - name: Run tests in Docker container
+      # This bash process is load-bearing! Xserver(1) (including the Xvfb
+      # variant) will not send SIGUSR1 for readiness notification to pid 1, so
+      # we need to ensure that the i3.test process is not pid 1:
+      # https://gitlab.freedesktop.org/xorg/xserver/-/blob/4195e8035645007be313ade79032b8d561ceec6c/os/connection.c#L207
+      # Bash documents that each command in a pipeline is executed as a separate
+      # process, so construct a pipeline to cat(1) to ensure a subprocess is
+      # used, as opposed to some shell’s process replacement optimization.
+      run: |
+        docker run -v $PWD:/usr/src goi3 bash -c 'cat | ./i3.test -test.v'

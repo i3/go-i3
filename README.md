@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/i3/go-i3.svg?branch=master)](https://travis-ci.org/i3/go-i3)
+![GitHub Actions CI](https://github.com/i3/go-i3/workflows/GitHub%20Actions%20CI/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/go.i3wm.org/i3)](https://goreportcard.com/report/go.i3wm.org/i3)
 [![GoDoc](https://godoc.org/go.i3wm.org/i3?status.svg)](https://godoc.org/go.i3wm.org/i3)
 
