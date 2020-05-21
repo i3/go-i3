@@ -76,8 +76,18 @@ func launchXvfb(ctx context.Context) (xvfb *exec.Cmd, DISPLAY string, _ error) {
 		// display likely available, try to start Xvfb
 		DISPLAY := fmt.Sprintf(":%d", display)
 		// Indicate we implement Xvfb’s readiness notification mechanism.
-		signal.Ignore(syscall.SIGUSR1)
-		xvfb := exec.CommandContext(ctx, "Xvfb", DISPLAY, "-screen", "0", "1280x800x24")
+		//
+		// We ignore SIGUSR1 in a shell wrapper process as there is currently no
+		// way to ignore signals in a child process, other than ignoring it in
+		// the parent (using signal.Ignore), which is prone to race conditions
+		// for this particular use-case:
+		// https://github.com/golang/go/issues/20479#issuecomment-303791827
+		ch := make(chan os.Signal, 1)
+		signal.Notify(ch, syscall.SIGUSR1)
+		xvfb := exec.CommandContext(ctx,
+			"sh",
+			"-c",
+			"trap '' USR1 && exec Xvfb "+DISPLAY+" -screen 0 1280x800x24")
 		if attempt == 99 { // last attempt
 			xvfb.Stderr = os.Stderr
 		}
@@ -85,17 +95,13 @@ func launchXvfb(ctx context.Context) (xvfb *exec.Cmd, DISPLAY string, _ error) {
 			continue
 		}
 
-		ch := make(chan os.Signal, 1)
-		signal.Notify(ch, syscall.SIGUSR1)
 		// The buffer of 1 allows the Wait() goroutine to return.
 		status := make(chan error, 1)
 		go func() {
 			defer signal.Stop(ch)
-			for sig := range ch {
-				if sig == syscall.SIGUSR1 {
-					status <- nil // success
-					return
-				}
+			for range ch {
+				status <- nil // success
+				return
 			}
 		}()
 		go func() {
