@@ -25,7 +25,7 @@ jobs:
 
     - name: Ensure all files were formatted as per gofmt
       run: |
-        [ "$(gofmt -l $(find . -name '*.go'))" = "" ]
+        [ "$(gofmt -l $(find . -name '*.go') 2>&1)" = "" ]
 
     - name: Get dependencies
       run: |
