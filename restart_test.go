@@ -20,9 +20,11 @@ func TestRestartSubprocess(t *testing.T) {
 	// received is buffered so that we can blockingly read on tick.
 	received := make(chan *ShutdownEvent, 1)
 	tick := make(chan *TickEvent)
+	fatal := make(chan bool)
 	go func() {
 		defer close(tick)
 		defer close(received)
+		defer close(fatal)
 		recv := Subscribe(ShutdownEventType, TickEventType)
 		defer recv.Close()
 		log.Printf("reading events")
@@ -36,7 +38,7 @@ func TestRestartSubprocess(t *testing.T) {
 			}
 		}
 		log.Printf("done reading events")
-		t.Fatal(recv.Close()) // should not be reached
+		fatal <- true
 	}()
 
 	log.Printf("read initial tick")
@@ -64,6 +66,13 @@ func TestRestartSubprocess(t *testing.T) {
 	log.Printf("getversion")
 	if _, err := GetVersion(); err != nil {
 		t.Fatal(err)
+	}
+
+	select {
+	case _ = <-fatal:
+		t.Fatal("Subscribe has been canceled by restart")
+	default:
+
 	}
 }
 
