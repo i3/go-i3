@@ -74,6 +74,17 @@ const (
 	FullscreenGlobal FullscreenMode = 2
 )
 
+// FloatingType indicates the floating type of Node.
+type FloatingType string
+
+// i3 currently implements the following node types:
+const (
+	AutoOff FloatingType = "auto_off"
+	AutoOn  FloatingType = "auto_on"
+	UserOn  FloatingType = "user_on"
+	UserOff FloatingType = "user_off"
+)
+
 // Node is a node in a Tree.
 //
 // See https://i3wm.org/docs/ipc.html#_tree_reply for more details.
@@ -99,6 +110,7 @@ type Node struct {
 	Focus              []NodeID         `json:"focus"`
 	Nodes              []*Node          `json:"nodes"`
 	FloatingNodes      []*Node          `json:"floating_nodes"`
+	Floating           FloatingType     `json:"floating"`
 }
 
 // FindChild returns the first Node matching predicate, using pre-order
