@@ -79,7 +79,7 @@ type FloatingType string
 
 // i3 currently implements the following node types:
 const (
-	AutoOff FloatingType = "auto_aff"
+	AutoOff FloatingType = "auto_off"
 	AutoOn  FloatingType = "auto_on"
 	UserOn  FloatingType = "user_on"
 	UserOff FloatingType = "user_off"
@@ -110,7 +110,7 @@ type Node struct {
 	Focus              []NodeID         `json:"focus"`
 	Nodes              []*Node          `json:"nodes"`
 	FloatingNodes      []*Node          `json:"floating_nodes"`
-	Floating           string           `json:"floating"`
+	Floating           FloatingType     `json:"floating"`
 }
 
 // FindChild returns the first Node matching predicate, using pre-order
