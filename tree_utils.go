@@ -6,6 +6,7 @@ func (n *Node) FindFocusedLeaf() *Node {
 	return n.FindFocused(func(n *Node) bool { return n.Focused })
 }
 
+// FindParent method returns the parent node of the curren one
 func (child *Node) FindParent() *Node {
 	tree, err := GetTree()
 	if err != nil {
@@ -23,9 +24,7 @@ func (child *Node) FindParent() *Node {
 	return parent
 }
 
+// IsFloating method returns true if the current node is floating
 func (n *Node) IsFloating() bool {
-	if len(n.Floating) < 4 {
-		return false
-	}
 	return strings.HasSuffix(string(n.Floating), "_on")
 }
