@@ -25,26 +25,6 @@ func TestTreeUtilsSubprocess(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Run("FindFocusedLeaf", func(t *testing.T) {
-		t.Parallel()
-		got, err := GetTree()
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		// Exercise FindFocusedLeaf to locate focused window.
-		node := got.Root.FindFocusedLeaf()
-		if node == nil {
-			t.Fatal("unexpectedly could not find any focused node in GetTree reply")
-		}
-		if len(node.Marks) == 0 {
-			t.Fatal("no marks found")
-		}
-		if node.Marks[0] != mark_name {
-			t.Fatal("wrong mark name")
-		}
-	})
-
 	t.Run("FindParent", func(t *testing.T) {
 		t.Parallel()
 		got, err := GetTree()
@@ -52,7 +32,7 @@ func TestTreeUtilsSubprocess(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		node := got.Root.FindFocusedLeaf()
+		node := got.Root.FindFocused(func(n *Node) bool { return n.Focused })
 		if node == nil {
 			t.Fatal("unexpectedly could not find any focused node in GetTree reply")
 		}
@@ -76,7 +56,7 @@ func TestTreeUtilsSubprocess(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		node := got.Root.FindFocusedLeaf()
+		node := got.Root.FindFocused(func(n *Node) bool { return n.Focused })
 		if node == nil {
 			t.Fatal("unexpectedly could not find any focused node in GetTree reply")
 		}
@@ -94,7 +74,7 @@ func TestTreeUtilsSubprocess(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		node = got.Root.FindFocusedLeaf()
+		node = got.Root.FindFocused(func(n *Node) bool { return n.Focused })
 		if node == nil {
 			t.Fatal("unexpectedly could not find any focused node in GetTree reply")
 		}
