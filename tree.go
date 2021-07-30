@@ -111,6 +111,7 @@ type Node struct {
 	Nodes              []*Node          `json:"nodes"`
 	FloatingNodes      []*Node          `json:"floating_nodes"`
 	Floating           FloatingType     `json:"floating"`
+	ScratchpadState    string           `json:"scratchpad_state"`
 }
 
 // FindChild returns the first Node matching predicate, using pre-order
