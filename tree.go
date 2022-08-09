@@ -112,6 +112,7 @@ type Node struct {
 	FloatingNodes      []*Node          `json:"floating_nodes"`
 	Floating           FloatingType     `json:"floating"`
 	ScratchpadState    string           `json:"scratchpad_state"`
+	AppID              string           `json:"app_id"` // if talking to Sway: Wayland App ID
 }
 
 // FindChild returns the first Node matching predicate, using pre-order
