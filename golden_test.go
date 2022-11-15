@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -197,14 +198,14 @@ func TestGoldensSubprocess(t *testing.T) {
 		if !IsUnsuccessful(err) {
 			t.Fatalf("command unexpectedly succeeded")
 		}
-		want := []CommandResult{
-			{
-				Success: false,
-				Error:   "Expected one of these tokens: <end>, '[', 'move', 'exec', 'exit', 'restart', 'reload', 'shmlog', 'debuglog', 'border', 'layout', 'append_layout', 'workspace', 'focus', 'kill', 'open', 'fullscreen', 'sticky', 'split', 'floating', 'mark', 'unmark', 'resize', 'rename', 'nop', 'scratchpad', 'swap', 'title_format', 'mode', 'bar'",
-			},
+		if len(got) != 1 {
+			t.Fatalf("expected precisely one reply, got %+v", got)
 		}
-		if diff := cmp.Diff(want, got); diff != "" {
-			t.Fatalf("unexpected RunCommand reply: (-want +got)\n%s", diff)
+		if got, want := got[0].Success, false; got != want {
+			t.Errorf("CommandResult.Success: got %v, want %v", got, want)
+		}
+		if want := "Expected one of these tokens:"; !strings.HasPrefix(got[0].Error, want) {
+			t.Errorf("CommandResult.Error: unexpected error: got %q, want prefix %q", got[0].Error, want)
 		}
 	})
 
