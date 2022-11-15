@@ -37,7 +37,7 @@ func TestGoldensSubprocess(t *testing.T) {
 		}
 		want := Version{
 			Major:                4,
-			Minor:                19,
+			Minor:                21,
 			Patch:                0,
 			LoadedConfigFileName: abs,
 		}
