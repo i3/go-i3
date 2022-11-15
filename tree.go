@@ -140,13 +140,13 @@ func (n *Node) FindChild(predicate func(*Node) bool) *Node {
 //
 // As an example, consider this layout tree (simplified):
 //
-//       root
-//         │
-//       HDMI2
-//        ╱ ╲
-//      …  workspace 1
-//           ╱ ╲
-//      XTerm   Firefox
+//	 root
+//	   │
+//	 HDMI2
+//	  ╱ ╲
+//	…  workspace 1
+//	     ╱ ╲
+//	XTerm   Firefox
 //
 // In this example, if Firefox is focused, FindFocused will return the first
 // container matching predicate of root, HDMI2, workspace 1, Firefox (in this
