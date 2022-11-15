@@ -219,8 +219,21 @@ func TestGoldensSubprocess(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		configPath, err := filepath.Abs("testdata/i3.config")
+		if err != nil {
+			t.Fatal(err)
+		}
 		want := Config{
 			Config: string(configBytes),
+			IncludedConfigs: []IncludedConfig{
+				{
+					Path:        configPath,
+					RawContents: string(configBytes),
+					// Our testdata configuration contains no variables,
+					// so this field contains configBytes as-is.
+					VariableReplacedContents: string(configBytes),
+				},
+			},
 		}
 		if diff := cmp.Diff(want, got); diff != "" {
 			t.Fatalf("unexpected GetConfig reply: (-want +got)\n%s", diff)
