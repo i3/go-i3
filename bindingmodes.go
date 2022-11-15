@@ -15,3 +15,22 @@ func GetBindingModes() ([]string, error) {
 	err = json.Unmarshal(reply.Payload, &bm)
 	return bm, err
 }
+
+// BindingState indicates which binding mode is currently active.
+type BindingState struct {
+	Name string `json:"name"`
+}
+
+// GetBindingState returns the currently active binding mode.
+//
+// GetBindingState is supported in i3 ≥ 4.19 (2020-11-15).
+func GetBindingState() (BindingState, error) {
+	reply, err := roundTrip(messageTypeGetBindingState, nil)
+	if err != nil {
+		return BindingState{}, err
+	}
+
+	var bm BindingState
+	err = json.Unmarshal(reply.Payload, &bm)
+	return bm, err
+}

@@ -75,6 +75,7 @@ const (
 	messageTypeGetConfig
 	messageTypeSendTick
 	messageTypeSync
+	messageTypeGetBindingState
 )
 
 var messageAtLeast = map[messageType]majorMinor{
@@ -90,6 +91,7 @@ var messageAtLeast = map[messageType]majorMinor{
 	messageTypeGetConfig:       {4, 14},
 	messageTypeSendTick:        {4, 15},
 	messageTypeSync:            {4, 16},
+	messageTypeGetBindingState: {4, 19},
 }
 
 const (
