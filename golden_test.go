@@ -82,7 +82,7 @@ func TestGoldensSubprocess(t *testing.T) {
 			Mode:                 "dock",
 			Position:             "bottom",
 			StatusCommand:        "i3status",
-			Font:                 "-misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1",
+			Font:                 "fixed",
 			WorkspaceButtons:     true,
 			BindingModeIndicator: true,
 			Colors: BarConfigColors{
