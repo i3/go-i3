@@ -12,7 +12,7 @@ RUN echo 'APT::Acquire::Retries "5";' > /etc/apt/apt.conf.d/80retry
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    i3-wm=4.21.1-1 xvfb strace && \
+    i3-wm=4.22-2 xvfb strace && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src
