@@ -63,6 +63,7 @@ type BindingEvent struct {
 		Symbol         string   `json:"symbol"`
 		InputType      string   `json:"input_type"`
 	} `json:"binding"`
+	Mode string `json:"mode"`
 }
 
 // ShutdownEvent contains the reason for which the IPC connection is about to be
