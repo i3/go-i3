@@ -96,11 +96,12 @@ type Node struct {
 	CurrentBorderWidth int64            `json:"current_border_width"`
 	Layout             Layout           `json:"layout"`
 	Percent            float64          `json:"percent"`
-	Rect               Rect             `json:"rect"`        // absolute (= relative to X11 display)
-	WindowRect         Rect             `json:"window_rect"` // window, relative to Rect
-	DecoRect           Rect             `json:"deco_rect"`   // decoration, relative to Rect
-	Geometry           Rect             `json:"geometry"`    // original window geometry, absolute
-	Window             int64            `json:"window"`      // X11 window ID of the client window
+	Rect               Rect             `json:"rect"`             // absolute (= relative to X11 display)
+	WindowRect         Rect             `json:"window_rect"`      // window, relative to Rect
+	DecoRect           Rect             `json:"deco_rect"`        // decoration, relative to Rect
+	ActualDecoRect     Rect             `json:"actual_deco_rect"` // see https://github.com/i3/i3/issues/1966
+	Geometry           Rect             `json:"geometry"`         // original window geometry, absolute
+	Window             int64            `json:"window"`           // X11 window ID of the client window
 	WindowProperties   WindowProperties `json:"window_properties"`
 	Urgent             bool             `json:"urgent"` // urgency hint set
 	Marks              []string         `json:"marks"`
